@@ -1,0 +1,14 @@
+node_modules/
+.env
+.env.local
+artifacts/
+cache/
+coverage/
+*.log
+.DS_Store
+build/
+dist/
+frontend/node_modules/
+frontend/.next/
+*.swp
+*.swo

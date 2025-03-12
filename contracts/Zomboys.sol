@@ -6,5 +6,12 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 contract Zomboys is ERC721, Ownable, ReentrancyGuard {
-    // Placeholder for base contract
-}
+    uint256 public constant MAX_SUPPLY = 10000;
+    uint256 public constant MINT_PRICE = 0.05 ether;
+    uint256 private _tokenIds;
+
+    string private _baseTokenURI;
+
+    constructor() ERC721("Zomboys", "ZOMB") {
+        _tokenIds = 0;
+    }

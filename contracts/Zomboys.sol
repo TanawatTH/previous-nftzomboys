@@ -15,3 +15,11 @@ contract Zomboys is ERC721, Ownable, ReentrancyGuard {
     constructor() ERC721("Zomboys", "ZOMB") {
         _tokenIds = 0;
     }
+
+    function mint() external payable nonReentrant {
+        require(_tokenIds < MAX_SUPPLY, "Max supply reached");
+        require(msg.value >= MINT_PRICE, "Insufficient payment");
+
+        _tokenIds++;
+        _safeMint(msg.sender, _tokenIds);
+    }

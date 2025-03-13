@@ -4,6 +4,7 @@ pragma solidity ^0.8.17;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
 contract Zomboys is ERC721, Ownable, ReentrancyGuard {
     uint256 public constant MAX_SUPPLY = 10000;
@@ -11,6 +12,9 @@ contract Zomboys is ERC721, Ownable, ReentrancyGuard {
     uint256 private _tokenIds;
 
     string private _baseTokenURI;
+
+    bytes32 public merkleRoot;
+    bool public presaleActive;
 
     constructor() ERC721("Zomboys", "ZOMB") {
         _tokenIds = 0;
@@ -22,4 +26,24 @@ contract Zomboys is ERC721, Ownable, ReentrancyGuard {
 
         _tokenIds++;
         _safeMint(msg.sender, _tokenIds);
+    }
+
+    function presaleMint(bytes32[] calldata _merkleProof) external payable nonReentrant {
+        require(presaleActive, "Presale not active");
+        require(_tokenIds < MAX_SUPPLY, "Max supply reached");
+        require(msg.value >= MINT_PRICE, "Insufficient payment");
+
+        bytes32 leaf = keccak256(abi.encodePacked(msg.sender));
+        require(MerkleProof.verify(_merkleProof, merkleRoot, leaf), "Invalid proof");
+
+        _tokenIds++;
+        _safeMint(msg.sender, _tokenIds);
+    }
+
+    function setMerkleRoot(bytes32 _root) external onlyOwner {
+        merkleRoot = _root;
+    }
+
+    function togglePresale() external onlyOwner {
+        presaleActive = !presaleActive;
     }

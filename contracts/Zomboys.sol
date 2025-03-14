@@ -5,8 +5,9 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
+import "@openzeppelin/contracts/token/common/ERC2981.sol";
 
-contract Zomboys is ERC721, Ownable, ReentrancyGuard {
+contract Zomboys is ERC721, Ownable, ReentrancyGuard, ERC2981 {
     uint256 public constant MAX_SUPPLY = 10000;
     uint256 public constant MINT_PRICE = 0.05 ether;
     uint256 private _tokenIds;
@@ -18,6 +19,7 @@ contract Zomboys is ERC721, Ownable, ReentrancyGuard {
 
     constructor() ERC721("Zomboys", "ZOMB") {
         _tokenIds = 0;
+        _setDefaultRoyalty(owner(), 500); // 5% royalty
     }
 
     function mint() external payable nonReentrant {
@@ -46,4 +48,8 @@ contract Zomboys is ERC721, Ownable, ReentrancyGuard {
 
     function togglePresale() external onlyOwner {
         presaleActive = !presaleActive;
+    }
+
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC2981) returns (bool) {
+        return super.supportsInterface(interfaceId);
     }

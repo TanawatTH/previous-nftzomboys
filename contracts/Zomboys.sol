@@ -53,3 +53,11 @@ contract Zomboys is ERC721, Ownable, ReentrancyGuard, ERC2981 {
     function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC2981) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
+
+    function _baseURI() internal view override returns (string memory) {
+        return _baseTokenURI;
+    }
+
+    function setBaseURI(string memory _uri) external onlyOwner {
+        _baseTokenURI = _uri;
+    }

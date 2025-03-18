@@ -58,6 +58,10 @@ contract Zomboys is ERC721, Ownable, ReentrancyGuard, ERC2981 {
         return _baseTokenURI;
     }
 
+    function baseURI() external view returns (string memory) {
+        return _baseURI();
+    }
+
     function setBaseURI(string memory _uri) external onlyOwner {
         _baseTokenURI = _uri;
     }

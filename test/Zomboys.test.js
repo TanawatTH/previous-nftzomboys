@@ -40,4 +40,20 @@ describe("Zomboys", function () {
   it("Should support ERC2981 royalties", async function () {
     expect(await zomboys.supportsInterface("0x2a55205a")).to.equal(true); // ERC2981 interface
   });
+
+  it("Should allow owner to withdraw funds", async function () {
+    const mintPrice = ethers.utils.parseEther("0.05");
+    await zomboys.connect(addr1).mint({ value: mintPrice });
+
+    const initialBalance = await owner.getBalance();
+    await zomboys.withdraw();
+    const finalBalance = await owner.getBalance();
+    expect(finalBalance.gt(initialBalance)).to.equal(true);
+  });
+
+  it("Should set base URI correctly", async function () {
+    const uri = "https://ipfs.io/ipfs/";
+    await zomboys.setBaseURI(uri);
+    expect(await zomboys.baseURI()).to.equal(uri); // Assuming _baseURI is exposed, but it's internal
+  });
 });

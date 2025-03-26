@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useWeb3 } from "@/components/Web3Provider";
 import { ethers } from "ethers";
+import ConnectWallet from "@/components/ConnectWallet";
 
 const contractAddress = "0xYourContractAddress"; // Placeholder
 const abi = [
@@ -33,21 +34,15 @@ export default function MintPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
       <div className="text-center">
         <h1 className="text-4xl mb-4">Mint Your Zomboys NFT</h1>
-        {!account ? (
-          <button onClick={connectWallet} className="bg-blue-500 px-4 py-2 rounded">
-            Connect Wallet
+        <ConnectWallet />
+        {account && (
+          <button
+            onClick={handleMint}
+            disabled={minting}
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4"
+          >
+            {minting ? "Minting..." : "Mint (0.05 ETH)"}
           </button>
-        ) : (
-          <div>
-            <p>Connected: {account}</p>
-            <button
-              onClick={handleMint}
-              disabled={minting}
-              className="bg-green-500 px-4 py-2 rounded mt-4"
-            >
-              {minting ? "Minting..." : "Mint (0.05 ETH)"}
-            </button>
-          </div>
         )}
       </div>
     </div>

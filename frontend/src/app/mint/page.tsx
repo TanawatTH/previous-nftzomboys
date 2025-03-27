@@ -16,16 +16,25 @@ export default function MintPage() {
   const [minting, setMinting] = useState(false);
 
   const handleMint = async () => {
-    if (!signer) return;
+    if (!signer) {
+      alert("Please connect your wallet first");
+      return;
+    }
     setMinting(true);
     try {
       const contract = new ethers.Contract(contractAddress, abi, signer);
       const tx = await contract.mint({ value: ethers.utils.parseEther("0.05") });
       await tx.wait();
       alert("Minted successfully!");
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert("Minting failed");
+      if (error.code === 4001) {
+        alert("Transaction rejected by user");
+      } else if (error.message.includes("Insufficient payment")) {
+        alert("Insufficient funds for minting");
+      } else {
+        alert("Minting failed: " + error.message);
+      }
     }
     setMinting(false);
   };

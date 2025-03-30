@@ -39,11 +39,11 @@ export default function GalleryPage() {
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">
       <h1 className="text-4xl mb-8 text-center">Your Zomboys Gallery</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {nfts.map((nft) => (
-          <div key={nft.id} className="bg-gray-800 p-4 rounded">
-            <img src={nft.uri} alt={`Zomboys #${nft.id}`} className="w-full h-48 object-cover" />
-            <p className="mt-2">Zomboys #{nft.id}</p>
+          <div key={nft.id} className="bg-gray-800 p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+            <img src={nft.uri} alt={`Zomboys #${nft.id}`} className="w-full h-48 object-cover rounded" />
+            <p className="mt-2 text-center font-semibold">Zomboys #{nft.id}</p>
           </div>
         ))}
       </div>

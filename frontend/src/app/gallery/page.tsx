@@ -19,19 +19,27 @@ interface NFT {
 export default function GalleryPage() {
   const { provider, account } = useWeb3();
   const [nfts, setNfts] = useState<NFT[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchNFTs = async () => {
       if (!provider || !account) return;
-      const contract = new ethers.Contract(contractAddress, abi, provider);
-      const balance = await contract.balanceOf(account);
-      const nftList: NFT[] = [];
-      for (let i = 0; i < balance.toNumber(); i++) {
-        const tokenId = await contract.tokenOfOwnerByIndex(account, i);
-        const uri = await contract.tokenURI(tokenId);
-        nftList.push({ id: tokenId.toNumber(), uri });
+      setLoading(true);
+      try {
+        const contract = new ethers.Contract(contractAddress, abi, provider);
+        const balance = await contract.balanceOf(account);
+        const nftList: NFT[] = [];
+        for (let i = 0; i < balance.toNumber(); i++) {
+          const tokenId = await contract.tokenOfOwnerByIndex(account, i);
+          const uri = await contract.tokenURI(tokenId);
+          nftList.push({ id: tokenId.toNumber(), uri });
+        }
+        setNfts(nftList);
+      } catch (error) {
+        console.error("Error fetching NFTs:", error);
+        alert("Failed to load NFTs");
       }
-      setNfts(nftList);
+      setLoading(false);
     };
     fetchNFTs();
   }, [provider, account]);
@@ -39,14 +47,22 @@ export default function GalleryPage() {
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">
       <h1 className="text-4xl mb-8 text-center">Your Zomboys Gallery</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {nfts.map((nft) => (
-          <div key={nft.id} className="bg-gray-800 p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-            <img src={nft.uri} alt={`Zomboys #${nft.id}`} className="w-full h-48 object-cover rounded" />
-            <p className="mt-2 text-center font-semibold">Zomboys #{nft.id}</p>
-          </div>
-        ))}
-      </div>
+      {loading ? (
+        <p className="text-center">Loading your NFTs...</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {nfts.length === 0 ? (
+            <p className="col-span-full text-center">No NFTs found. Mint some first!</p>
+          ) : (
+            nfts.map((nft) => (
+              <div key={nft.id} className="bg-gray-800 p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+                <img src={nft.uri} alt={`Zomboys #${nft.id}`} className="w-full h-48 object-cover rounded" />
+                <p className="mt-2 text-center font-semibold">Zomboys #{nft.id}</p>
+              </div>
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 }

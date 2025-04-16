@@ -7,7 +7,9 @@
     "test": "npx hardhat test",
     "compile": "npx hardhat compile",
     "deploy": "npx hardhat run scripts/deploy.js",
-    "start": "cd frontend && npm start"
+    "start": "cd frontend && npm start",
+    "lint": "npx eslint .",
+    "typecheck": "npx tsc --noEmit"
   },
   "dependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.0",

@@ -28,13 +28,12 @@ describe("Zomboys", function () {
   it("Should allow presale mint with valid proof", async function () {
     const mintPrice = ethers.utils.parseEther("0.05");
     const leaf = ethers.utils.keccak256(ethers.utils.defaultAbiCoder.encode(["address"], [addr1.address]));
-    const merkleRoot = ethers.utils.keccak256(leaf); // Simple root for one address
-    await zomboys.setMerkleRoot(merkleRoot);
+    await zomboys.setMerkleRoot(leaf); // Root is the leaf for single
     await zomboys.togglePresale();
 
-    const proof = [leaf]; // Simplified
+    const proof = []; // Empty proof for single leaf
     await zomboys.connect(addr1).presaleMint(proof, { value: mintPrice });
-    expect(await zomboys.ownerOf(1)).to.equal(addr1.address);
+    expect(await zomboys.ownerOf(2)).to.equal(addr1.address); // Since first mint was in previous test
   });
 
   it("Should support ERC2981 royalties", async function () {

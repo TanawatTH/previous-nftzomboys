@@ -69,3 +69,4 @@ contract Zomboys is ERC721, Ownable, ReentrancyGuard, ERC2981 {
     function withdraw() external onlyOwner {
         payable(owner()).transfer(address(this).balance);
     }
+}

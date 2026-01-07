@@ -1,6 +1,6 @@
 # Zomboys NFT
 
-Zomboys is a collection of 10,000 unique zombie-themed characters living on the Arbitrum blockchain. Each Zomboys is procedurally generated with distinct traits including decaying skin, glowing eyes, and accessories, making them one-of-a-kind digital companions in the undead world.
+An old project consisting of a collection of zombie-themed characters. Each Zomboys is procedurally generated.
 
 ## Features
 
@@ -50,12 +50,3 @@ Zomboys is a collection of 10,000 unique zombie-themed characters living on the 
 - Mint page: `/mint`
 - Gallery: `/gallery`
 - NFT details: `/nft/[id]`
-
-## Contract Address
-
-- Testnet: [TBD]
-- Mainnet: [TBD]
-
-## License
-
-MIT License. See LICENSE file for details.
